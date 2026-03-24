@@ -8,8 +8,11 @@ public class RobotMovement : MonoBehaviour
     InputActionMap actionMap;
     InputAction moveAction;
     float currentVelocity;
+    //Vector2 moveInput;
+    //Vector3 moveDirection;
+
     [SerializeField] float Speed = 5f;
-    [SerializeField] 
+    [SerializeField] float rotationSmoothTime = 0.1f;
 
     void Awake()
     {
@@ -35,9 +38,9 @@ public class RobotMovement : MonoBehaviour
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
 
         float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
-        //float smoothAngle = Mathf.SmoothDampAngle(moveDirection.y, targetAngle, ref currentVelocity, rotationSmoothTime);
-        //Debug.Log(smoothAngle);
-        transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+        float smoothAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref currentVelocity, rotationSmoothTime);
+        Debug.Log(smoothAngle);
+        transform.rotation = Quaternion.Euler(0, smoothAngle, 0);
 
         RobotController.Move(moveDirection * Time.deltaTime * Speed);
     }
