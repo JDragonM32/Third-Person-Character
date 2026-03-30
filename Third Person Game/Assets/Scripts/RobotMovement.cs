@@ -3,45 +3,71 @@ using UnityEngine.InputSystem;
 
 public class RobotMovement : MonoBehaviour
 {
-    CharacterController RobotController;
+    CharacterController robotController;
     [SerializeField] InputActionAsset inputActions;
+    [SerializeField] Transform cameraTransform;
     InputActionMap actionMap;
     InputAction moveAction;
-    float currentVelocity;
-    //Vector2 moveInput;
-    //Vector3 moveDirection;
+    InputAction jumpAction;
+    float currentVelocity; // For smooth rotation pass to Mathf.SmoothDampAngle
 
-    [SerializeField] float Speed = 5f;
+    [SerializeField] float speed = 5f;
     [SerializeField] float rotationSmoothTime = 0.1f;
+
+    [SerializeField] float jumpHeight = 1.5f;
+    bool isGrounded;
+    float verticalVelocity = -2.0f;
+    float gravity = 9.81f;
 
     void Awake()
     {
         actionMap = inputActions.FindActionMap("Player");
         moveAction = actionMap.FindAction("Move");
+        jumpAction = actionMap.FindAction("Jump");
     }
+
     void OnEnable()
     {
-        actionMap.Enable();   
+        actionMap.Enable();
     }
+
     void OnDisable()
     {
         actionMap.Disable();
     }
+
     void Start()
     {
-     RobotController = GetComponent<CharacterController>();   
+        robotController = GetComponent<CharacterController>();
     }
 
-    void FixedUpdate()
+    void Update()
     {
+        isGrounded = robotController.isGrounded;
+        if (isGrounded && verticalVelocity < 0)
+        {
+            verticalVelocity = -2f;
+        }
+
+        if(jumpAction.IsPressed() && isGrounded)
+        {
+            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+        verticalVelocity += gravity * Time.deltaTime;
+
         Vector2 moveInput = moveAction.ReadValue<Vector2>();
+        if(moveInput.magnitude > 0.1f)
+        {
+            Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
+        }
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
 
-        float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
+        float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;
         float smoothAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref currentVelocity, rotationSmoothTime);
-        Debug.Log(smoothAngle);
+        Vector3 moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
         transform.rotation = Quaternion.Euler(0, smoothAngle, 0);
 
-        RobotController.Move(moveDirection * Time.deltaTime * Speed);
+        Vector3 velocity = moveDir * speed + Vector3.up * verticalVelocity * gravity * -1;
+        robotController.Move(velocity * Time.deltaTime);
     }
 }
