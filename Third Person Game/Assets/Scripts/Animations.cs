@@ -1,0 +1,24 @@
+using UnityEngine;
+
+public class Animations : MonoBehaviour
+{
+    Animator robotAnimator;
+    RobotMovement robotMovement;
+    void Start()
+    {
+        robotAnimator = GetComponentInChildren<Animator>();
+        robotMovement = GetComponent<RobotMovement>();
+    }
+
+    void Update()
+    {
+        if (robotMovement.moveInput.magnitude > 0.01f)
+        {
+            robotAnimator.SetBool("isWalking", true);
+        }
+        else
+        {
+            robotAnimator.SetBool("isWalking", false);
+        }
+    }
+}

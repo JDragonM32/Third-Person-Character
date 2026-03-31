@@ -6,10 +6,13 @@ public class ThirdPersonCamera : MonoBehaviour
     [SerializeField] InputActionAsset InputActions;
     InputActionMap actionMap;
     InputAction lookAction;
+
     [SerializeField] Transform playerTransform;
     [SerializeField] Vector3 cameraOffset;
     [SerializeField] float cameraHeight = 1.5f;
     [SerializeField] Vector2 pitchMinMax = new Vector2(-30, 80);
+    [SerializeField] float cameraSensitivity = 1.0f;
+
     float yaw, pitch;
 
     private void Awake()
@@ -34,8 +37,8 @@ public class ThirdPersonCamera : MonoBehaviour
     void Update()
     {
         Vector2 mouseInput = lookAction.ReadValue<Vector2>();
-        yaw += mouseInput.x;
-        pitch -= mouseInput.y;
+        yaw += mouseInput.x * cameraSensitivity;
+        pitch -= mouseInput.y * cameraSensitivity;
         pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
         Quaternion desiredRotation = Quaternion.Euler(pitch, yaw, 0);
         Vector3 offset = desiredRotation * new Vector3(0, 0, -3);
