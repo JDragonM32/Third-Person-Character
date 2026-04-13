@@ -8,4 +8,8 @@ public class BulletScript : MonoBehaviour
         bulletRB = GetComponent<Rigidbody>();
         bulletRB.AddRelativeForce(Vector3.forward * 1000F);
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        Destroy(gameObject);
+    }
 }

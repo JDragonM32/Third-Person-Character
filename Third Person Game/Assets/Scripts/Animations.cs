@@ -14,11 +14,16 @@ public class Animations : MonoBehaviour
     {
         if (robotMovement.moveInput.magnitude > 0.01f)
         {
-            robotAnimator.SetBool("isWalking", true);
+            robotAnimator.SetBool("IsWalking", true);
         }
         else
         {
-            robotAnimator.SetBool("isWalking", false);
+            robotAnimator.SetBool("IsWalking", false);
+        }
+
+        if (robotMovement.IsJumping)
+        {
+            robotAnimator.SetTrigger("IsJumping");
         }
     }
 }

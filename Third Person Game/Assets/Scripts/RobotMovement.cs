@@ -7,6 +7,8 @@ public class RobotMovement : MonoBehaviour
     [SerializeField] InputActionAsset inputActions;
     [SerializeField] Transform cameraTransform;
     [SerializeField] GameObject Bullet;
+    [SerializeField] Transform fireTransform;
+
     InputActionMap actionMap;
     InputAction moveAction;
     InputAction jumpAction;
@@ -17,11 +19,12 @@ public class RobotMovement : MonoBehaviour
 
     [SerializeField] float speed = 5f;
     [SerializeField] float rotationSmoothTime = 0.1f;
-
     [SerializeField] float jumpHeight = 0.5f;
     bool isGrounded;
     float verticalVelocity = -2.0f;
     float gravity = -9.81f;
+
+   [HideInInspector] public bool IsJumping;
 
     void Awake()
     {
@@ -48,10 +51,11 @@ public class RobotMovement : MonoBehaviour
 
     void Update()
     {
-        if (attackAction.IsPressed()) { }
+        if (attackAction.WasPressedThisFrame())
         {
-            
+            Instantiate(Bullet, fireTransform.position, fireTransform.rotation);
         }
+
         isGrounded = robotController.isGrounded;
         if (isGrounded && verticalVelocity < 0)
         {
@@ -60,9 +64,13 @@ public class RobotMovement : MonoBehaviour
 
         if (jumpAction.IsPressed() && isGrounded)
         {
+            IsJumping = true;
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        } else
+        {
+            IsJumping = false;
         }
-        verticalVelocity += gravity * Time.deltaTime;
+            verticalVelocity += gravity * Time.deltaTime;
 
         moveInput = moveAction.ReadValue<Vector2>();
         Vector3 moveDir = Vector3.zero;
