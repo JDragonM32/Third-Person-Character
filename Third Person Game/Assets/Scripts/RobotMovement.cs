@@ -55,7 +55,7 @@ public class RobotMovement : MonoBehaviour
         {
             Instantiate(Bullet, fireTransform.position, fireTransform.rotation);
         }
-
+        if (jumpAction.WasPressedThisFrame())
         isGrounded = robotController.isGrounded;
         if (isGrounded && verticalVelocity < 0)
         {
