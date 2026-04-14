@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 10736510}
   - component: {fileID: 10736509}
   - component: {fileID: 10736508}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,6 +250,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1378147119}
+  - {fileID: 143443634}
   m_Father: {fileID: 305842764}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &67901249
@@ -329,6 +330,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67901247}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &143443633
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 143443634}
+  m_Layer: 0
+  m_Name: Shooter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &143443634
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 143443633}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.266, z: -2.88}
+  m_LocalScale: {x: 2, y: 0.5, z: 2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 67901248}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &305842760
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,8 +392,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6f92c60a615736428ec33d0d9e87e6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIEnemy
-  attackRange: 0
-  sightRange: 0
+  attackRange: 8
+  sightRange: 12
   player: {fileID: 10736511}
   playerLayer:
     serializedVersion: 2
@@ -370,6 +402,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   patrolRange: 100
+  projectileBullet: {fileID: 8749698478032084355, guid: f86cca347b9d113479bd29cec54f8f50, type: 3}
+  firePoint: {fileID: 143443634}
 --- !u!195 &305842762
 NavMeshAgent:
   m_ObjectHideFlags: 0

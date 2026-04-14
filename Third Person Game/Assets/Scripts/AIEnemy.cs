@@ -9,10 +9,14 @@ public class AIEnemy : MonoBehaviour
     [SerializeField] Transform player;
     [SerializeField] LayerMask playerLayer, groundLayer;
     [SerializeField] float patrolRange;
+    [SerializeField] GameObject projectileBullet;
+    [SerializeField] Transform firePoint;
+
     Vector3 walkPoint;
 
     bool playerInSightRange, playerInAttackRange;
     bool walkPointSet;
+    bool alreadyShooting = false;
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -40,13 +44,26 @@ public class AIEnemy : MonoBehaviour
     void AttackPlayer()
     {
         //attack logic
-        Debug.Log("Attacking Player");
+        //Debug.Log("Attacking Player");
+        agent.SetDestination(transform.position);
+        transform.LookAt(player);
+
+        if (!alreadyShooting)
+        {
+            Instantiate(projectileBullet, firePoint.position, firePoint.rotation);
+
+            alreadyShooting = true;
+            Invoke(nameof(ResetShoot), 1.0f);
+        }
+    }
+
+    void ResetShoot()
+    {
+        alreadyShooting = false;
     }
 
     void Patrol()
     {
-        //patrol logic
-        //Debug.Log("Patrolling");
         if (!walkPointSet) SearchWalkPoint();
 
         Vector3 distanceToWalk = transform.position - walkPoint;
@@ -69,7 +86,6 @@ public class AIEnemy : MonoBehaviour
             walkPointSet = true;
         }
     }
-
 
     private void OnDrawGizmosSelected()
     {
